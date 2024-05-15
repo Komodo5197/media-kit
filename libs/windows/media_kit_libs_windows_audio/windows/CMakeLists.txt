@@ -71,7 +71,7 @@ set(REPO_URL "https://github.com/zhongfly/mpv-winbuild/releases/latest/download"
 set(LIBMPV_SHA256 "${CMAKE_BINARY_DIR}/sha256.txt")
 file(DOWNLOAD "${REPO_URL}/sha256.txt" "${LIBMPV_SHA256}")
 file(READ "${LIBMPV_SHA256}" sha256_file_contents)
-string(REGEX MATCH "([a-f0-9]+) (mpv-x86_64-[0-9]+-git-[a-f0-9]+\.7z)" _ "${sha256_file_contents}")
+string(REGEX MATCH "([a-f0-9]+) (mpv-dev-x86_64-[0-9]+-git-[a-f0-9]+\.7z)" _ "${sha256_file_contents}")
 
 # libmpv archive containing the pre-built shared libraries & headers.
 set(LIBMPV ${CMAKE_MATCH_2})
