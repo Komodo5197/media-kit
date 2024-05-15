@@ -62,16 +62,28 @@ endfunction()
 
 # Thanks to Mitchel Stewart (https://github.com/Quackdoc) for providing patches to generate minimal libmpv & FFmpeg audio specific builds.
 
-# libmpv archive containing the pre-built shared libraries & headers.
-set(LIBMPV "mpv-dev-x86_64-20240515-git-4d32db2.7z")
+
 
 # Download URL & MD5 hash of the libmpv archive.
-set(LIBMPV_URL "https://github.com/zhongfly/mpv-winbuild/releases/download/2024-05-15-1f7c223/${LIBMPV}")
-set(LIBMPV_MD5 "46bf023980db8380dcf47cd32e672106af440e493525be5cfe4e2331175db43b")
+set(REPO_URL "https://github.com/zhongfly/mpv-winbuild/releases/latest/download")
+
+# Fetch name and checksum of latest MPV build
+set(LIBMPV_SHA256 "${CMAKE_BINARY_DIR}/sha256.txt")
+file(DOWNLOAD "${REPO_URL}/sha256.txt" "${LIBMPV_SHA256}")
+file(READ "${LIBMPV_SHA256}" sha256_file_contents)
+string(REGEX MATCH "([a-f0-9]+) (mpv-x86_64-[0-9]+-git-[a-f0-9]+\.7z)" _ "${sha256_file_contents}")
+
+# libmpv archive containing the pre-built shared libraries & headers.
+set(LIBMPV ${CMAKE_MATCH_2})
+
+set(LIBMPV_URL "${REPO_URL}/${LIBMPV}")
+set(LIBMPV_MD5 ${CMAKE_MATCH_1})
 
 # Download location of the libmpv archive.
 set(LIBMPV_ARCHIVE "${CMAKE_BINARY_DIR}/${LIBMPV}")
 set(LIBMPV_SRC "${CMAKE_BINARY_DIR}/libmpv")
+
+message("Using ${LIBMPV} with checksum ${LIBMPV_MD5}")
 
 download_and_verify(
   ${LIBMPV_URL}
