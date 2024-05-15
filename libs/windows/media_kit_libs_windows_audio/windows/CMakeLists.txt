@@ -16,7 +16,7 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 function(download_and_verify url md5 locationForArchive)
   # Check if the archive exists.
   if(EXISTS "${locationForArchive}")
-    file(MD5 "${locationForArchive}" ARCHIVE_MD5)
+    file(SHA256 "${locationForArchive}" ARCHIVE_MD5)
 
     # If MD5 doesn't match, delete the archive to download again.
     if(NOT md5 STREQUAL ARCHIVE_MD5)
@@ -32,7 +32,7 @@ function(download_and_verify url md5 locationForArchive)
     message(STATUS "Downloaded archive to ${locationForArchive}.")
 
     # Verify MD5 of the newly downloaded file.
-    file(MD5 "${locationForArchive}" ARCHIVE_MD5)
+    file(SHA256 "${locationForArchive}" ARCHIVE_MD5)
 
     if(md5 STREQUAL ARCHIVE_MD5)
       message(STATUS "${locationForArchive} Verification successful.")
@@ -63,11 +63,11 @@ endfunction()
 # Thanks to Mitchel Stewart (https://github.com/Quackdoc) for providing patches to generate minimal libmpv & FFmpeg audio specific builds.
 
 # libmpv archive containing the pre-built shared libraries & headers.
-set(LIBMPV "mpv-dev-x86_64-20230924-git-652a1dd.7z")
+set(LIBMPV "mpv-dev-x86_64-20240515-git-4d32db2.7z")
 
 # Download URL & MD5 hash of the libmpv archive.
-set(LIBMPV_URL "https://github.com/media-kit/libmpv-win32-audio-build/releases/download/2023-09-24/${LIBMPV}")
-set(LIBMPV_MD5 "cd738e16e2a19626d7cfa48801524f8c")
+set(LIBMPV_URL "https://github.com/zhongfly/mpv-winbuild/releases/download/2024-05-15-1f7c223/${LIBMPV}")
+set(LIBMPV_MD5 "46bf023980db8380dcf47cd32e672106af440e493525be5cfe4e2331175db43b")
 
 # Download location of the libmpv archive.
 set(LIBMPV_ARCHIVE "${CMAKE_BINARY_DIR}/${LIBMPV}")
