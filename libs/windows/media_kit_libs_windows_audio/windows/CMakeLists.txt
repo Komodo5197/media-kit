@@ -21,7 +21,7 @@ function(download_and_verify url md5 locationForArchive)
     # If MD5 doesn't match, delete the archive to download again.
     if(NOT md5 STREQUAL ARCHIVE_MD5)
       file(REMOVE "${locationForArchive}")
-      message(STATUS "MD5 mismatch. File deleted.")
+      message(STATUS "SHA256 mismatch. File deleted.")
     endif()
   endif()
 
@@ -80,16 +80,19 @@ set(LIBMPV_URL "${REPO_URL}/${LIBMPV}")
 set(LIBMPV_MD5 ${CMAKE_MATCH_1})
 
 # Download location of the libmpv archive.
-set(LIBMPV_ARCHIVE "${CMAKE_BINARY_DIR}/${LIBMPV}")
+set(LIBMPV_ARCHIVE "${CMAKE_BINARY_DIR}/mpv-dev-x86_64-latest.7z")
 set(LIBMPV_SRC "${CMAKE_BINARY_DIR}/libmpv")
 
-message("Using ${LIBMPV} with checksum ${LIBMPV_MD5}")
-
-download_and_verify(
-  ${LIBMPV_URL}
-  ${LIBMPV_MD5}
-  ${LIBMPV_ARCHIVE}
-)
+if(DEFINED LIBMPV AND DEFINED LIBMPV_MD5)
+  message("Using ${LIBMPV} with checksum ${LIBMPV_MD5}")
+  download_and_verify(
+    ${LIBMPV_URL}
+    ${LIBMPV_MD5}
+    ${LIBMPV_ARCHIVE}
+  )
+else()
+  message("Failed to locate latest mpv release. Attempting to use cached version.")
+endif()
 
 check_directory_exists_and_not_empty(${LIBMPV_SRC} LIBMPV_SRC_VALID)
 
